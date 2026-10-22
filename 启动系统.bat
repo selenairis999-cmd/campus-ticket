@@ -10,5 +10,5 @@ echo   看到 "Started CampusTicketApplication" 即为成功
 echo   启动后请勿关闭本窗口，关闭即停止服务
 echo   访问地址: http://localhost:8080
 echo ============================================
-java -jar target\campus-ticket-0.0.1-SNAPSHOT.jar
+java -jar target\campus-ticket-0.1.0.jar
 pause

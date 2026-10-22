@@ -13,7 +13,7 @@
 
 	<groupId>com.example</groupId>
 	<artifactId>campus-ticket</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<name>campus-ticket</name>
 	<description>校园活动票务系统</description>
 

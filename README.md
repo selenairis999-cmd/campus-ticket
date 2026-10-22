@@ -176,7 +176,7 @@ npm run dev
 # 启动
 启动系统.bat
 # 或
-java -jar target/campus-ticket-0.0.1-SNAPSHOT.jar
+java -jar target/campus-ticket-0.1.0.jar
 ```
 
 访问 <http://localhost:8080>。

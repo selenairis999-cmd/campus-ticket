@@ -2,7 +2,7 @@
 """系统安全性用例的实测核验（只读 + 只读接口，不落库）。
 
 逐条给出系统安全性测试用例的实测证据。
-运行前需先启动后端：java -jar target/campus-ticket-0.0.1-SNAPSHOT.jar
+运行前需先启动后端：java -jar target/campus-ticket-0.1.0.jar
 """
 import json
 import time
