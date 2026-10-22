@@ -1,0 +1,99 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### 运行时产物 ###
+logs/
+*.log
+risk-analysis/output/
+frontend/node_modules/
+frontend/dist/
+# 前端构建产物由 一键打包.bat 从 frontend/dist 拷贝生成，不入库
+src/main/resources/static/
+
+### 本机真实配置（含密钥/数据库口令，绝不入库）###
+application-local.yml
+*.local.yml
+.env
+.env.*
+
+### 本地备份与临时核对文件 ###
+db_backup_*.sql
+_thesis_*.docx
+_thesis_*.txt
+_verify*.txt
+_docx_*.txt
+_*_out.txt
+
+### 论文工作区产物（非系统代码，本地留档）###
+_dsh/
+.dsh-tmp-docx/
+_figmap/
+_figmap*.py
+_diag_bili/
+_new_media/
+_new_media2/
+_sc_*.png
+_t*.pdf
+_fonttest.pdf
+_thesis_*.txt
+_audit_extract.py
+_check_runs.py
+_db_check.py
+_docx_health.py
+_dump_tables.py
+_q1.py
+_q2.py
+_q3.py
+压测结果.csv
+_archive/
+
+### 与本项目无关的 AI 工具记忆/配置 ###
+.workbuddy-ai/
+.zcodeignore
+.qoder/
+.cursor/
+docs/reports/
+docs/softcopyright/
+docs/答辩演示稿.md
+tools/thesis/
+
+### 编辑器/系统 ###
+.DS_Store
+Thumbs.db
+*.swp
+
+### Python 缓存 ###
+__pycache__/
+*.pyc
+

@@ -1,0 +1,65 @@
+server:
+  port: 8080
+  compression:
+    enabled: true
+
+# 本文件是提交到版本库的「模板」，只保留占位值，不含任何真实密钥。
+# 每台机器各自的真实配置写在 application-local.yml（已被 .gitignore 排除），
+# Spring Boot 会用同名的 key 覆盖本文件的占位值。首次运行见 README「配置密钥」。
+spring:
+  config:
+    import: optional:file:./application-local.yml
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/campus_ticket?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:change-me}
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true  # 开启下划线转驼峰命名映射
+    # 注意：不要开 log-impl: StdOutImpl（每条 SQL 打到控制台）。
+    # Windows 控制台"快速编辑模式"下，鼠标点中黑窗口会冻结输出管道，
+    # 所有请求线程会堵死在日志锁上（表现为全站超时"网络错误"）。
+    # 需要看 SQL 时改用日志文件（见 logging 配置）+ DEBUG 级别。
+  type-aliases-package: com.example.campusticket.entity
+
+# 日志落文件：控制台只保留少量启动信息，完整日志看 logs/campus-ticket.log
+logging:
+  file:
+    name: logs/campus-ticket.log
+
+# JWT 令牌密钥：生产/演示都必须换成随机长字符串。
+# 优先读环境变量 JWT_SECRET，其次读 application-local.yml；两者都没有时用占位值（仅供启动，不要上线）。
+jwt:
+  secret: ${JWT_SECRET:please-set-jwt-secret-in-application-local-yml}
+
+# 二维码签名密钥（与 JWT 密钥分开，同样必须换成随机串）
+qrcode:
+  secret: ${QRCODE_SECRET:please-set-qrcode-secret-in-application-local-yml}
+
+# 抢票风控阈值（功能10，答辩演示时可现场调整）
+risk:
+  enabled: true              # 总开关，true 时 R1/R2 在线拦截生效；造数/压测时改回 false，造数完成后再开启
+  user-window-seconds: 10    # R1 统计窗口
+  user-max-requests: 5       # R1 窗口内请求上限
+  user-punish-seconds: 30    # R1 命中后惩罚时长
+  ip-rule-enabled: false     # R2 开关（默认关，防NAT误杀）
+  ip-window-seconds: 60
+  ip-max-accounts: 3         # R2 同IP同活动账号数上限
+  python-path: python       # 离线检测调用的 Python 解释器（默认走系统 PATH；如未加入 PATH 改为绝对路径）
+  analysis-dir: risk-analysis  # 离线检测脚本目录，相对项目根目录（脚本以相对路径读写 output/）
+
+# 评论情感分析相关配置（Python 解释器与脚本路径均在此配置，部署时修改即可）
+# 路径相对项目根目录，因此启动时工作目录须为项目根（启动系统.bat 已 cd 到根目录）
+sentiment:
+  python-path: python            # Python 解释器路径（默认走系统 PATH）
+  predict-script: sentiment/predict_new.py       # 增量情感分析脚本（每60秒自动调用，管理端"立即分析"亦调用）
+  # 模型指标脚本：供人工复现论文 6.4 节表 14 的实验结论使用
+  # （python sentiment/model_metrics.py --live 可重算当前样本）。
+  # 管理端"模型指标"卡片固定读取 sentiment/experiments/metrics.json 的实验口径，
+  # 不调用本脚本，以免页面上同时出现两套不同的准确率。
+  metrics-script: sentiment/model_metrics.py
+
+
+

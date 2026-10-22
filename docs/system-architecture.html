@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>系统总体架构图</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:"Microsoft YaHei","PingFang SC","SimHei",sans-serif;
+    background:#ffffff; color:#243b53;
+  }
+  .canvas {
+    width:1560px; height:1060px; background:#ffffff;
+    padding:22px 26px; position:relative;
+  }
+  .main-row { display:flex; gap:18px; height:100%; }
+
+  /* ===== 左侧主分层结构 ===== */
+  .stack { flex:1 1 auto; display:flex; flex-direction:column; }
+  .layer {
+    border:1.5px solid #4a5a70; border-radius:8px; background:#fafbfd;
+    padding:9px 12px 11px;
+  }
+  .layer-head { display:flex; align-items:center; gap:10px; margin-bottom:7px; }
+  .layer-tag {
+    background:#2f5b8f; color:#fff; font-size:17px; font-weight:700;
+    padding:3px 12px; border-radius:4px; letter-spacing:1px;
+  }
+  .layer-note { font-size:14px; color:#64748b; }
+  .boxes { display:flex; gap:8px; }
+  .box {
+    flex:1; background:#fff; border:1px solid #8fa3b8; border-radius:5px;
+    text-align:center; padding:6px 4px; font-size:17px; color:#243b53; line-height:1.4;
+  }
+  .box .sub { display:block; font-size:14px; color:#64748b; margin-top:1px; }
+  .box.hl { border:1.5px solid #2b6cb0; background:#eef4fb; font-weight:600; }
+
+  /* 控制层芯片与横切条 */
+  .chips { display:flex; gap:8px; }
+  .chip {
+    flex:1; background:#fff; border:1px solid #8fa3b8; border-radius:5px;
+    text-align:center; padding:5px 4px; font-size:16px; line-height:1.35;
+  }
+  .chip .en { display:block; font-size:13px; color:#64748b; font-family:Consolas,monospace; }
+  .crosscut {
+    margin-top:7px; border:1px dashed #8fa3b8; border-radius:5px; background:#f4f7fa;
+    text-align:center; padding:4px 6px; font-size:15px; color:#41586e;
+  }
+
+  /* 数据层 */
+  .db-chips { display:flex; flex-wrap:wrap; gap:5px 6px; flex:1.2; }
+  .tchip {
+    background:#eef2f6; border:1px solid #c3cfdb; border-radius:3px;
+    font-family:Consolas,"Microsoft YaHei",monospace; font-size:14px;
+    padding:1px 6px; color:#33475b;
+  }
+  .data-row2 { display:flex; gap:8px; margin-top:7px; }
+  .data-row2 .box { font-size:16px; padding:5px 4px; }
+  .data-flex { display:flex; gap:8px; }
+
+  /* 算法层 */
+  .algo .layer-tag { background:#6b5ca5; }
+  .algo .box { border-color:#9b8fc4; background:#f9f8fd; }
+  .algo .box.hl2 { border-width:1.5px; background:#f2effa; font-weight:600; }
+
+  /* ===== 层间箭头 ===== */
+  .gap { display:flex; align-items:center; justify-content:center; height:25px; gap:14px; }
+  .stem { display:flex; flex-direction:column; align-items:center; }
+  .stem .line { width:1.5px; height:14px; background:#4a5a70; }
+  .stem .line.dash { width:0; height:14px; border-left:1.5px dashed #4a5a70; background:none; }
+  .stem .head {
+    width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent;
+    border-top:7px solid #4a5a70; margin-top:-1px;
+  }
+  .gap .lbl { font-size:15px; color:#5a6b7f; }
+
+  /* ===== 右侧竖条 ===== */
+  .side { flex:0 0 318px; display:flex; flex-direction:column; gap:14px; padding-top:0; }
+  .side-box { border-radius:8px; padding:10px 12px 12px; display:flex; flex-direction:column; }
+  .side-box.risk { border:1.5px solid #b03a2e; background:#fdf4f3; flex:1.35; }
+  .side-box.env  { border:1.5px solid #52657d; background:#fafbfd; flex:1; }
+  .side-tag {
+    color:#fff; font-size:17px; font-weight:700; padding:3px 12px;
+    border-radius:4px; width:max-content; letter-spacing:1px; margin-bottom:8px;
+  }
+  .risk .side-tag { background:#b03a2e; }
+  .env  .side-tag { background:#52657d; }
+  .side-box ul { list-style:none; display:flex; flex-direction:column; gap:7px; }
+  .side-box li { font-size:16px; line-height:1.45; padding-left:14px; position:relative; color:#2d3e52; }
+  .side-box li::before { content:""; position:absolute; left:2px; top:8px; width:6px; height:6px; border-radius:50%; }
+  .risk li::before { background:#b03a2e; }
+  .env  li::before { background:#52657d; }
+  .side-foot {
+    margin-top:auto; border-top:1px dashed #b9a79f; padding-top:7px;
+    font-size:14px; color:#8a5a52;
+  }
+  .env .side-foot { border-top-color:#aebccb; color:#5a6b7f; }
+  .side-spacer { flex:1; border-left:1.5px dashed #b9c2ce; margin-left:10px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="main-row">
+
+    <!-- ============ 左侧：七层主结构 ============ -->
+    <div class="stack">
+
+      <!-- 1 用户层 -->
+      <div class="layer">
+        <div class="layer-head"><span class="layer-tag">用户层</span><span class="layer-note">四类角色 + 压测客户端</span></div>
+        <div class="boxes">
+          <div class="box">学生端<span class="sub">浏览活动 · 抢票 · 我的票券 · 证书</span></div>
+          <div class="box">组织者端<span class="sub">活动/票种管理 · 出勤统计</span></div>
+          <div class="box">核销员端<span class="sub">扫码核销</span></div>
+          <div class="box">管理员端<span class="sub">风控监控 · 情感分析中心</span></div>
+          <div class="box">JMeter 客户端<span class="sub">并发压测 · 仿真造数</span></div>
+        </div>
+      </div>
+
+      <div class="gap"><div class="stem"><div class="line"></div><div class="head"></div></div><span class="lbl">浏览器 HTTP 交互</span></div>
+
+      <!-- 2 表现层 -->
+      <div class="layer">
+        <div class="layer-head"><span class="layer-tag">表现层</span><span class="layer-note">Vue 3 单页应用（构建产物由后端托管）</span></div>
+        <div class="boxes">
+          <div class="box">Vue Router<span class="sub">路由与角色守卫</span></div>
+          <div class="box">Element Plus<span class="sub">UI 组件库</span></div>
+          <div class="box">ECharts<span class="sub">统计可视化</span></div>
+          <div class="box">Axios<span class="sub">请求封装 · Token 携带</span></div>
+          <div class="box">qrcode / jsqr<span class="sub">票码生成 · 扫码识别</span></div>
+        </div>
+      </div>
+
+      <div class="gap"><div class="stem"><div class="line"></div><div class="head"></div></div><span class="lbl">REST API（JSON · JWT Token）</span></div>
+
+      <!-- 3 控制层 -->
+      <div class="layer">
+        <div class="layer-head"><span class="layer-tag">控制层</span><span class="layer-note">Spring Boot Web（Controller）</span></div>
+        <div class="chips">
+          <div class="chip">登录认证<span class="en">LoginController</span></div>
+          <div class="chip">活动管理<span class="en">ActivityController</span></div>
+          <div class="chip">票券<span class="en">TicketController</span></div>
+          <div class="chip">签到核销<span class="en">CheckinController</span></div>
+          <div class="chip">评论<span class="en">CommentController</span></div>
+          <div class="chip">统计<span class="en">StatsController</span></div>
+          <div class="chip">风控<span class="en">RiskController</span></div>
+        </div>
+        <div class="crosscut">JWT 认证拦截（AuthInterceptor）· @RequireRole 角色鉴权 · Result 统一响应 · SPA 回退</div>
+      </div>
+
+      <div class="gap"><div class="stem"><div class="line"></div><div class="head"></div></div><span class="lbl">Service 业务调用</span></div>
+
+      <!-- 4 业务服务层 -->
+      <div class="layer">
+        <div class="layer-head"><span class="layer-tag">业务服务层</span><span class="layer-note">Service / ServiceImpl（事务边界）</span></div>
+        <div class="boxes">
+          <div class="box">用户认证<span class="sub">注册 · 登录 · 找回</span></div>
+          <div class="box">活动与票种管理<span class="sub">增删改 · 状态流转</span></div>
+          <div class="box hl">抢票服务<span class="sub">时间窗 · 一人一票 · 双重乐观锁</span></div>
+          <div class="box">票券与动态二维码<span class="sub">一次一码 · 3 秒 SHA-256 签名</span></div>
+          <div class="box">签到核销<span class="sub">验签 · 状态更新</span></div>
+          <div class="box">评论管理<span class="sub">已核销可评 · 追评≤2 · 60s 定时回填</span></div>
+          <div class="box">统计与证书<span class="sub">活动统计 · 电子证书</span></div>
+        </div>
+      </div>
+
+      <div class="gap"><div class="stem"><div class="line"></div><div class="head"></div></div><span class="lbl">Mapper 接口</span></div>
+
+      <!-- 5 持久层 -->
+      <div class="layer">
+        <div class="layer-head"><span class="layer-tag">持久层</span><span class="layer-note">MyBatis-Plus 3.5.5</span></div>
+        <div class="boxes">
+          <div class="box">BaseMapper CRUD · Lambda 条件构造器 · 分页插件 · 乐观锁（@Version）条件更新</div>
+        </div>
+      </div>
+
+      <div class="gap"><div class="stem"><div class="line"></div><div class="head"></div></div><span class="lbl">JDBC / SQL</span></div>
+
+      <!-- 6 数据层 -->
+      <div class="layer">
+        <div class="layer-head"><span class="layer-tag">数据层</span></div>
+        <div class="data-flex">
+          <div class="box" style="flex:1.4; text-align:left; padding:6px 10px;">
+            <b>MySQL（campus_ticket 库，8 张表）</b>
+            <div class="db-chips" style="margin-top:5px;">
+              <span class="tchip">sys_user</span><span class="tchip">activity</span><span class="tchip">ticket</span>
+              <span class="tchip">ticket_order</span><span class="tchip">eticket</span><span class="tchip">checkin_record</span>
+              <span class="tchip">activity_comment</span><span class="tchip">grab_log</span>
+            </div>
+          </div>
+          <div class="box" style="flex:1;">内存结构<span class="sub">滑动窗口队列 · 惩罚名单<br>（ConcurrentHashMap）</span></div>
+          <div class="box" style="flex:1;">本地文件<span class="sub">grab_log 导出 CSV<br>特征与报告数据</span></div>
+        </div>
+      </div>
+
+      <div class="gap">
+        <span class="lbl">↑ 情感结果回填</span>
+        <div class="stem"><div class="line dash"></div><div class="head"></div></div>
+        <span class="lbl">↓ 抢票日志导出（CSV）</span>
+      </div>
+
+      <!-- 7 算法层 -->
+      <div class="layer algo">
+        <div class="layer-head"><span class="layer-tag">算法层</span><span class="layer-note">Python（pandas · scikit-learn · matplotlib）</span></div>
+        <div class="boxes">
+          <div class="box hl2">评论情感分析<span class="sub">TF-IDF（字符级 1-2gram）· SVM / LR / NB 三模型对比<br>后端定时任务每 60s 增量预测回填</span></div>
+          <div class="box hl2">孤立森林异常检测<span class="sub">抢票机器人识别 · 与 3σ 统计基线对照</span></div>
+          <div class="box">特征工程与可视化<span class="sub">10 维用户行为特征 · 异常报告与图表</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============ 右侧：横切与支撑 ============ -->
+    <div class="side">
+
+      <div class="side-box risk">
+        <div class="side-tag">风控模块（横切层）</div>
+        <ul>
+          <li>RiskService：埋点 + 拦截门面，覆盖控制层 / 业务层 / 数据层</li>
+          <li>R0 封禁黑名单（登录 + 抢票入口均校验 · 不受总开关约束）</li>
+          <li>R1 单用户滑动窗口限频（10s 内 5 次，命中惩罚 30s）</li>
+          <li>R2 同 IP 多账号检测（默认关闭，防 NAT 误杀）</li>
+          <li>分级处置：30s 自动惩罚 → 限时 7/30 天 → 永久封禁</li>
+          <li>GrabLog 抢票日志全量埋点（成功 / 失败 / 拦截原因）</li>
+          <li>命中即实时拦截并返回提示，记录 RISK_BLOCKED 日志</li>
+          <li>管理端风控监控大盘（异常账号、拦截记录）</li>
+        </ul>
+        <div class="side-foot">总开关可配置 · 风控异常只告警，不阻断抢票主流程</div>
+      </div>
+
+      <div class="side-box env">
+        <div class="side-tag">支撑与运行环境</div>
+        <ul>
+          <li>Spring Boot 3.2.5 · Java 17 · Maven</li>
+          <li>MySQL 8.x · MyBatis-Plus 3.5.5</li>
+          <li>Vue 3 · Element Plus · ECharts · Vite</li>
+          <li>Python（pandas · scikit-learn · matplotlib）</li>
+          <li>Hutool（JWT · 二维码签名）· Lombok</li>
+          <li>JMeter 5.x：并发压测 · 仿真数据构造</li>
+        </ul>
+        <div class="side-foot">单服务部署：前端静态资源由 Spring Boot 托管（端口 8080）</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

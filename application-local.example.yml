@@ -1,0 +1,20 @@
+# ============================================================
+# 复制本文件为 application-local.yml 并填入你自己机器的值。
+# application-local.yml 被 .gitignore 排除，不会进入版本库。
+#   cp application-local.example.yml application-local.yml   (Linux/macOS)
+#   copy application-local.example.yml application-local.yml (Windows)
+#
+# 生成随机密钥：
+#   python -c "import secrets;print(secrets.token_urlsafe(32))"
+#   openssl rand -base64 32
+# ============================================================
+spring:
+  datasource:
+    username: root
+    password: "your-mysql-password"
+
+jwt:
+  secret: "replace-with-random-string"
+
+qrcode:
+  secret: "replace-with-another-random-string"

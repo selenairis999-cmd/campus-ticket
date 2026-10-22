@@ -1,0 +1,66 @@
+[
+  {
+    "key": "user",
+    "title": "用户实体图（sys_user）",
+    "path": "D:\\develop\\IdeaProjects\\campus-ticket\\docs\\thesis-figures\\er\\fig04_er_user.png",
+    "fs": 12.75,
+    "insert_in": 6.2,
+    "insert_h_in": 2.903
+  },
+  {
+    "key": "activity",
+    "title": "活动实体图（activity）",
+    "path": "D:\\develop\\IdeaProjects\\campus-ticket\\docs\\thesis-figures\\er\\fig04_er_activity.png",
+    "fs": 11.5,
+    "insert_in": 6.2,
+    "insert_h_in": 3.715
+  },
+  {
+    "key": "ticket_type",
+    "title": "票种实体图（ticket）",
+    "path": "D:\\develop\\IdeaProjects\\campus-ticket\\docs\\thesis-figures\\er\\fig04_er_ticket_type.png",
+    "fs": 14.5,
+    "insert_in": 6.2,
+    "insert_h_in": 2.59
+  },
+  {
+    "key": "ticket_order",
+    "title": "订单实体图（ticket_order）",
+    "path": "D:\\develop\\IdeaProjects\\campus-ticket\\docs\\thesis-figures\\er\\fig04_er_ticket_order.png",
+    "fs": 12.75,
+    "insert_in": 6.2,
+    "insert_h_in": 1.95
+  },
+  {
+    "key": "eticket",
+    "title": "电子票实体图（eticket）",
+    "path": "D:\\develop\\IdeaProjects\\campus-ticket\\docs\\thesis-figures\\er\\fig04_er_eticket.png",
+    "fs": 12.5,
+    "insert_in": 6.2,
+    "insert_h_in": 2.875
+  },
+  {
+    "key": "checkin",
+    "title": "核销记录实体图（checkin_record）",
+    "path": "D:\\develop\\IdeaProjects\\campus-ticket\\docs\\thesis-figures\\er\\fig04_er_checkin.png",
+    "fs": 10.25,
+    "insert_in": 6.2,
+    "insert_h_in": 2.34
+  },
+  {
+    "key": "comment",
+    "title": "评论实体图（activity_comment）",
+    "path": "D:\\develop\\IdeaProjects\\campus-ticket\\docs\\thesis-figures\\er\\fig04_er_comment.png",
+    "fs": 10.5,
+    "insert_in": 6.2,
+    "insert_h_in": 2.799
+  },
+  {
+    "key": "grab_log",
+    "title": "抢票日志实体图（grab_log）",
+    "path": "D:\\develop\\IdeaProjects\\campus-ticket\\docs\\thesis-figures\\er\\fig04_er_grab_log.png",
+    "fs": 11.5,
+    "insert_in": 6.2,
+    "insert_h_in": 2.34
+  }
+]
