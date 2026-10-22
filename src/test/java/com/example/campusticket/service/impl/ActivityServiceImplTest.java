@@ -39,7 +39,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * 抢票流程单元测试（对应论文 4.4.1 节与表2 抢票用例）
+ * 抢票流程单元测试（覆盖抢票成功/失败各分支与事务回滚）
  * 核心回归点：票种库存已扣减后，活动总库存扣减失败必须"抛异常触发回滚"，
  * 而不是 return Result.error —— 后者不会回滚事务，会造成库存泄漏。
  */

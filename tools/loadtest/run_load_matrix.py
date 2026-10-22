@@ -7,7 +7,7 @@
     python tools/run_load_matrix.py --runs 5
 
 前置条件：应用已启动，且 application.yml 中 risk.enabled=false（见 README 7.3）。
-结果写入 压测结果.csv（项目根目录），中位数可直接填入论文表 13。
+结果写入 压测结果.csv（项目根目录），中位数可直接作为并发性能结论。
 """
 import argparse
 import csv
@@ -79,7 +79,7 @@ def main():
 
     print()
     print('=' * 70)
-    print('中位数汇总（可填入论文表 13）')
+    print('中位数汇总（可作为并发性能结论）')
     print('=' * 70)
     print(f'{"并发":>5} {"库存":>5} {"成功":>5} {"售罄拒绝":>9} {"平均(ms)":>9} '
           f'{"成功均值(ms)":>13} {"P99(ms)":>9} {"吞吐(req/s)":>12} {"超卖":>5}')

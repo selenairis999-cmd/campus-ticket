@@ -73,7 +73,7 @@ def main():
         print('手工真实评论 %d 条，SnowNLP 命中 %d 条，命中率 %.0f%%' % (real_total, real_hit, real_hit / real_total * 100))
 
     print()
-    print('对比结论（写论文/简历用）')
+    print('对比结论（写简历用）')
     print('  SVM（TF-IDF+LinearSVC）：98.78% | 手工评论命中率 88%')
     print('  SnowNLP 基线：%.2f%% | 手工评论命中率 %.0f%%' % (acc * 100, real_hit / real_total * 100 if real_total else 0))
 

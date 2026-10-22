@@ -38,7 +38,7 @@ jwt:
 qrcode:
   secret: ${QRCODE_SECRET:please-set-qrcode-secret-in-application-local-yml}
 
-# 抢票风控阈值（功能10，答辩演示时可现场调整）
+# 抢票风控阈值（功能10，演示时可现场调整）
 risk:
   enabled: true              # 总开关，true 时 R1/R2 在线拦截生效；造数/压测时改回 false，造数完成后再开启
   user-window-seconds: 10    # R1 统计窗口
@@ -55,7 +55,7 @@ risk:
 sentiment:
   python-path: python            # Python 解释器路径（默认走系统 PATH）
   predict-script: sentiment/predict_new.py       # 增量情感分析脚本（每60秒自动调用，管理端"立即分析"亦调用）
-  # 模型指标脚本：供人工复现论文 6.4 节表 14 的实验结论使用
+  # 模型指标脚本：供人工复现对比实验结论使用
   # （python sentiment/model_metrics.py --live 可重算当前样本）。
   # 管理端"模型指标"卡片固定读取 sentiment/experiments/metrics.json 的实验口径，
   # 不调用本脚本，以免页面上同时出现两套不同的准确率。

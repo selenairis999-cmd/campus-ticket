@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-生成论文图 6「核销流程图」——标准流程图符号（圆角矩形起止、矩形处理、菱形判断、箭头控制流）。
+生成「核销流程图」——标准流程图符号（圆角矩形起止、矩形处理、菱形判断、箭头控制流）。
 
 流程严格对应实现：
   AuthInterceptor + @RequireRole(CHECKER)  → Token 与角色校验
   CheckinServiceImpl#verify              → 动态码校验、票券查询、状态与时间窗校验、
                                             条件更新（status 0→1）、写核销记录
 
-用法：python docs/thesis-figures/make_fig6_flowchart.py
-输出：docs/thesis-figures/fig06_checkin_flow_standard.png
+用法：python docs/diagrams/make_fig6_flowchart.py
+输出：docs/diagrams/fig06_checkin_flow_standard.png
 """
 import os
 import sys

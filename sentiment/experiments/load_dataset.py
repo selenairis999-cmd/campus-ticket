@@ -2,7 +2,7 @@
 """
 load_dataset.py —— 将 build_dataset.py 生成的数据集导入数据库
 
-用于还原论文 6.4 节的实验语料（1828 条带真实标签的活动评论）。
+用于还原对比实验语料（1828 条带真实标签的活动评论）。
 导入时：
     sentiment_label = 真实标签（0/1/2/9），供离线实验训练与评测
     sentiment       = NULL，交由线上模型（sentiment/predict_new.py，60 秒定时任务）回填，

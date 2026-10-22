@@ -34,7 +34,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * 核销流程单元测试（对应论文表3 核销用例与 5.5 节）
+ * 核销流程单元测试（覆盖核销成功/重复核销与时间窗）
  * 覆盖：动态码校验、防重复入场、验票时间窗（活动开始前 1 小时 ～ 活动结束）、
  * 并发核销只有一个请求成功。
  */

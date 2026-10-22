@@ -1,6 +1,6 @@
 name: campus-ticket
 # 校园票务与智能分析系统 —— Python 侧运行/实验环境
-# 用途：抢票风控离线检测（孤立森林）、评论情感分析（TF-IDF + LinearSVC）、论文实验复现
+# 用途：抢票风控离线检测（孤立森林）、评论情感分析（TF-IDF + LinearSVC）、对比实验复现
 #
 # 复现：
 #   conda env create -f environment.yml
@@ -8,7 +8,7 @@ name: campus-ticket
 # 然后把 application-local.yml 里的 risk.python-path / sentiment.python-path
 # 指向本环境的 python.exe（本机绝对路径，不入库）。
 #
-# 版本与论文第 6.4 / 6.5 节实验所用完全一致（2026-10-22 实测：
+# 版本与两组对比实验所用完全一致（2026-10-22 实测：
 # LinearSVC 0.976 / 逻辑回归 0.972 / 朴素贝叶斯 0.963，孤立森林精确率召回率均 1.00）。
 channels:
   - defaults
@@ -24,6 +24,6 @@ dependencies:
   - matplotlib=3.8.4      # 若嫌体积大可换 matplotlib-base（省掉 Qt 依赖）
   - pillow
   - pip:
-      - snownlp==0.12.3     # 论文表 14 的对比基线
+      - snownlp==0.12.3     # 情感分析对比实验的基线
       - pymysql==1.2.3      # 脚本直连 MySQL 读写
       - bcrypt==5.0.0       # 运维脚本：口令哈希迁移/重置

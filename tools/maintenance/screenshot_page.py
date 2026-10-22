@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""用 Playwright 登录并截取指定页面（用于论文插图重新截图）。
+"""用 Playwright 登录并截取指定页面（用于文档配图截图）。
 
 用法：
   python tools/screenshot_page.py <输出png> [--route /admin/risk] [--width 1440] [--full]

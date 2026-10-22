@@ -3,7 +3,7 @@
 -- 依赖：先执行 docs/sql/schema.sql 建表
 -- 执行：mysql -uroot -p campus_ticket < docs/sql/seed.sql
 -- 说明：所有账号初始密码均为 123456（库中存 BCrypt 哈希，非明文）。
---       种子数据仅为演示/答辩用，正式部署请修改密码或删除演示账号。
+--       种子数据仅为演示用，正式部署请修改密码或删除演示账号。
 -- 可重复执行（INSERT ... ON DUPLICATE KEY UPDATE，username 为唯一键）。
 -- ============================================================
 

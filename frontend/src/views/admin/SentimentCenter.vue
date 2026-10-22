@@ -212,7 +212,7 @@ const refreshAll = async () => {
   refreshing.value = true;
   try {
     // 「刷新」只刷新随数据变化的内容（满意度排行、情感分布饼图、明细）。
-    // 顶部的模型指标卡固定展示论文定稿实验口径（表 14），不在此处重算，
+    // 顶部的模型指标卡固定展示定稿实验口径，不在此处重算，
     // 避免页面上同时出现两套互不相同的准确率。
     await loadRanking();
     await loadInfo();      // 同步待分析评论数

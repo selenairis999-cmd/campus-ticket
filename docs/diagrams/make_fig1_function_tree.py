@@ -2,7 +2,7 @@
 """
 图 1 系统功能结构图：标准「根节点 → 模块 → 功能点」树形，按 A4 版心宽 6.2in 排版。
 
-为什么要重画：原图是 3572x595 的极扁横图（宽高比 6:1），插入论文后只有 1.88in 高，
+为什么要重画：原图是 3572x595 的极扁横图（宽高比 6:1），按 A4 版心宽度插入后只有 1.88in 高，
 文字被压到约 5pt 无法辨认，且 6.44in 宽已超出 6.3in 版心。改为「模块三列栅格 +
 功能点纵向排列」后把 A4 的高度用起来，字号可放大到 10~12pt（正文同级）。
 
@@ -13,10 +13,10 @@
      这样「一键抢票 / 时间窗·一人一票」这类带标注的功能点不必折成难看的长行；
   4. 折行遵守中文排版惯例：括号内容、英文单词、数字为原子单元，
      不在「（」后或「）」前断行（见 atoms()），折行时选最均衡的断点；
-  5. 纯黑白、无底纹；图内字号即论文中的实际字号。
+  5. 纯黑白、无底纹；图内字号即导出后的实际字号。
 
 用法：
-  python docs/thesis-figures/make_fig1_function_tree.py
+  python docs/diagrams/make_fig1_function_tree.py
 """
 import os
 import re
@@ -354,7 +354,7 @@ def main():
 
     print("saved   :", out)
     print("bytes   :", out.stat().st_size)
-    print("字号    : %.2f pt（图内即论文实际字号；标注 %.2f pt；根节点 %.2f pt）"
+    print("字号    : %.2f pt（图内即实际字号；标注 %.2f pt；根节点 %.2f pt）"
           % (chosen["fs"], chosen["ann_fs"], chosen["root_fs"]))
     print("像素    : %d x %d @ %d dpi" % (w_px, h_px, DPI))
     print("插入尺寸: %.2f in x %.2f in  （版心 6.30 x 9.73 in）"

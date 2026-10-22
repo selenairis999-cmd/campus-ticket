@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * 动态二维码单元测试（对应论文 2.6 节与 5.5 节核销流程）
+ * 动态二维码单元测试（覆盖签名格式与核销时间窗）
  * 重点覆盖时间窗方向性：过期码与"未来时间戳"伪造码都必须被拒绝。
  */
 class QrCodeUtilTest {

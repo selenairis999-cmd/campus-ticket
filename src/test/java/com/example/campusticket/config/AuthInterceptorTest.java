@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 /**
- * 登录鉴权与封禁拦截单元测试（对应论文 4.4.4 节 R0 与表12 功能测试）
+ * 登录鉴权与封禁拦截单元测试（覆盖 R0 黑名单与角色校验）
  * 核心回归点：被封禁账号持"仍然有效"的旧令牌访问任意业务接口都应被 401 拒绝，
  * 而不是只在登录与抢票入口校验。
  * 请求/响应用 Spring 的 Mock 实现（真实行为），只有 JwtUtil 与 SysUserMapper 用 Mockito 打桩。

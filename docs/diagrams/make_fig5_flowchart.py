@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-生成论文图 5「抢票流程图」——标准流程图符号：
+生成「抢票流程图」——标准流程图符号：
   圆角矩形 = 起止框，矩形 = 处理框，菱形 = 判断框，箭头 = 控制流。纯黑白。
 
 上一版的两个毛病在这里修掉：
@@ -10,14 +10,14 @@
      且箭头标签让开菱形顶点。
 
 菱形按「文字块须落在菱形内接矩形内」的约束自动放大：w/DW + h/DH <= 0.94。
-画布逻辑单位就是 pt，设计宽度 = 论文中的插入宽度，图内字号即论文实际字号。
+画布逻辑单位就是 pt，设计宽度 = 正文的插入宽度，图内字号即导出后的实际字号。
 
 流程与失败分支严格对应：
   ActivityController#grabTicket（风控在线校验 + 版本冲突有限次重试）
   ActivityServiceImpl#grabTicket（业务校验 + 双重乐观锁扣减）
 
-用法：python docs/thesis-figures/make_fig5_flowchart.py
-输出：docs/thesis-figures/fig05_grab_flow_standard.png
+用法：python docs/diagrams/make_fig5_flowchart.py
+输出：docs/diagrams/fig05_grab_flow_standard.png
 """
 import os
 
@@ -39,7 +39,7 @@ for _f in (r"C:\Windows\Fonts\msyh.ttc", r"C:\Windows\Fonts\simhei.ttf",
         break
 
 # ---------------------------------------------------------------- 版面参数（单位 pt）
-TARGET_W_IN = 6.2               # 论文中的插入宽度（A4 版心宽 6.3in 之内）
+TARGET_W_IN = 6.2               # 正文插入宽度（A4 版心宽 6.3in 之内）
 MAX_H_IN = 9.4                  # 单页版心高 9.73in，留出题注空间
 DPI = 300
 PT = 72.0
@@ -228,7 +228,7 @@ fig.savefig(OUT, dpi=DPI, facecolor="white")
 px = Image.open(OUT).size
 print("saved   :", OUT)
 print("bytes   :", os.path.getsize(OUT))
-print("字号    : %.2f pt（论文中即为实际字号）" % fs)
+print("字号    : %.2f pt（导出后的实际字号）" % fs)
 print("像素    : %d x %d @ %d dpi" % (px[0], px[1], DPI))
 print("插入尺寸: %.2f in x %.2f in  （版心 6.30 x 9.73 in）"
       % (TARGET_W_IN, TARGET_W_IN * total_h / W))

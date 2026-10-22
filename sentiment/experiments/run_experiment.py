@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-run_experiment.py —— 情感分析对比实验（论文 6.4 节 / 表 14 / 图 20）
+run_experiment.py —— 情感分析对比实验（SVM / LR / NB / SnowNLP）
 
 一次性完成：
   1. 读取 build_dataset.py 生成的数据集（1828 条，四分类）
@@ -220,7 +220,7 @@ def main():
 
 
 def draw_confusion(result):
-    """绘制四分类混淆矩阵（论文图 20：以本文 SVM 方案为准）。"""
+    """绘制四分类混淆矩阵（以 SVM 方案为准）。"""
     try:
         import matplotlib
         matplotlib.use('Agg')

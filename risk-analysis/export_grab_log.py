@@ -6,8 +6,8 @@
 
 注意：带活动参数的分析结果会另存为 output/grab_log_act<id>.csv，
 不会覆盖不带参数导出的全量 output/grab_log.csv。
-论文 6.5 节引用的基准数据集是"风控实验-混合流量"（activity_id=11）的 341 条，
-重建方式：python export_grab_log.py 11（该活动即论文口径）。"""
+基准数据集是"风控实验-混合流量"（activity_id=11）的 341 条，
+重建方式：python export_grab_log.py 11（该活动即基准口径）。"""
 import os
 import sys
 import pymysql

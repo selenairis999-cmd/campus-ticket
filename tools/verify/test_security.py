@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-"""表 15 安全性用例的实测核验（只读 + 只读接口，不落库）。
+"""系统安全性用例的实测核验（只读 + 只读接口，不落库）。
 
-对应论文 6.6 节表 15「系统安全性测试用例」的每一条，逐条给出实测证据。
+逐条给出系统安全性测试用例的实测证据。
 运行前需先启动后端：java -jar target/campus-ticket-0.0.1-SNAPSHOT.jar
 """
 import json
@@ -103,7 +103,7 @@ if admin_token and token:
     ok('定位 student01 的 userId', uid is not None, 'uid=%s' % uid)
     if uid:
         st, body = call('/risk/ban', token=admin_token, method='POST', form=True,
-                        body={'userId': uid, 'days': 1, 'reason': '表15核验：临时封禁'})
+                        body={'userId': uid, 'days': 1, 'reason': '安全核验：临时封禁'})
         ok('管理员封禁 student01', body.get('code') == 200,
            'code=%s msg=%s' % (body.get('code'), body.get('msg')))
         time.sleep(0.4)
@@ -215,7 +215,7 @@ if tid:
                 ok('SEC-10 时间戳为毫秒级且接近当前时间', False, 'ts=%r' % ts_s)
 
 print('== SEC-01 密码哈希存储（直查库） ==')
-# 论文表 15：验证密码是否以哈希形式存储、不落明文
+# 安全用例：验证密码是否以哈希形式存储、不落明文
 import pymysql
 _c1 = pymysql.connect(host='localhost', user='root', password='123456',
                       database='campus_ticket', charset='utf8mb4')
@@ -231,7 +231,7 @@ ok('SEC-01 无明文口令', not _plain, '明文账号=%s' % (_plain or '无'))
 
 print()
 print('== SEC-06 SQL 注入（业务接口实测） ==')
-# 论文表 15：输入校验 —— SQL 注入防护。注入串必须原样回显/被转义，且不得报 500
+# 安全用例：输入校验 —— SQL 注入防护。注入串必须原样回显/被转义，且不得报 500
 _INJ = "' OR '1'='1"
 st, body = call('/activity/page?pageNum=1&pageSize=5&keyword=' + urllib.parse.quote(_INJ), token=token)
 ok('SEC-06 注入串未致 500', st != 500 and body.get('code') != 500,
@@ -245,7 +245,7 @@ _c1.close()
 
 print()
 print('== SEC-07 XSS 防护（前端模板静态核验） ==')
-# 论文表 15：输入校验 —— XSS 防护。Vue 的 {{ }} 默认转义；只有 v-html 会渲染裸 HTML
+# 安全用例：输入校验 —— XSS 防护。Vue 的 {{ }} 默认转义；只有 v-html 会渲染裸 HTML
 import glob as _glob
 import os as _os
 _vue = _glob.glob(_os.path.join('frontend', 'src', '**', '*.vue'), recursive=True)

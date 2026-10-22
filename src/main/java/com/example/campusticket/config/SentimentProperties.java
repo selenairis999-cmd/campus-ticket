@@ -19,7 +19,7 @@ public class SentimentProperties {
 
     /**
      * 模型指标脚本（model_metrics.py）路径。
-     * 仅供人工/命令行复现论文 6.4 节实验使用；管理端的模型指标卡片固定读取
+     * 仅供人工/命令行复现对比实验使用；管理端的模型指标卡片固定读取
      * sentiment/experiments/metrics.json，不调用本脚本。
      */
     private String metricsScript = "model_metrics.py";

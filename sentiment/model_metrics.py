@@ -1,11 +1,11 @@
 # model_metrics.py —— 情感分析模型指标计算
 # 两种模式：
 #  默认模式（无参数）：读取 sentiment/experiments/metrics.json —— 即 run_experiment.py 在
-#    1828 条数据集（8:2 分层、字符级 1-2 元 TF-IDF）上的实测结果，与论文 6.4 节表 14 一致。
+#    1828 条数据集（8:2 分层、字符级 1-2 元 TF-IDF）上的实测结果，即定稿实验口径。
 #    指标全部来自实验产物，不再手工填写，避免"页面数字与实验脱节"。
 #  --live 模式：基于当前数据库全量带标注样本重新训练评估（SVM / LR / NB + 手工命中率，
 #    秒级完成，不含 SnowNLP 全量逐条，避免长阻塞），供"刷新"按钮展示实时评估结果。
-# 用法：python model_metrics.py            # 论文口径（读实验产物）
+# 用法：python model_metrics.py            # 定稿口径（读实验产物）
 #       python model_metrics.py --live     # 当前样本实时评估
 import json
 import os
@@ -24,7 +24,7 @@ DB = dict(host='localhost', port=3306, user='root', password='123456',
 HERE = os.path.dirname(os.path.abspath(__file__))
 METRICS_JSON = os.path.join(HERE, 'experiments', 'metrics.json')
 
-# 论文手工真实评论（25 条，见论文 6.4 节）
+# 手工真实评论（25 条泛化测试集）
 REAL_TEXTS = [
     '散场的时候人特别多，挤了半小时才出来，不过整体还是玩得挺开心',
     '场地布置很漂亮，可惜音响太拉胯了，前几排根本听不清',
@@ -55,7 +55,7 @@ REAL_TEXTS = [
 
 
 def paper_metrics():
-    """论文口径：读取 run_experiment.py 生成的实测指标。"""
+    """定稿口径：读取 run_experiment.py 生成的实测指标。"""
     if not os.path.isfile(METRICS_JSON):
         return {'error': '缺少实验产物 metrics.json，请先运行 sentiment/experiments/run_experiment.py'}
     with open(METRICS_JSON, encoding='utf-8') as f:

@@ -4,8 +4,8 @@
 叠加了两个智能模块：**抢票风控**（在线规则引擎 + 离线孤立森林检测）与
 **活动评论情感分析**（TF-IDF + LinearSVC 四分类）。
 
-本仓库为本科毕业设计《校园票务与智能分析系统的设计与实现》的完整实现，
-论文中的全部实验数据均可由本仓库内的脚本重新生成。
+系统源码、离线实验脚本与可复现的实验数据都在本仓库内：
+实现细节见第六节，实验与压测的复现步骤见第七节。
 
 ---
 
@@ -37,21 +37,21 @@ campus-ticket/
 ├── src/main/resources/
 │   └── application.yml  # 配置模板（密钥/口令走占位符，真实值放本地 application-local.yml）
 ├── application-local.example.yml  # 本机配置模板（复制为 application-local.yml 使用）
-├── environment.yml    # Python 侧 conda 环境定义（风控/情感分析脚本与论文实验用）
+├── environment.yml    # Python 侧 conda 环境定义（风控/情感分析脚本与离线实验用）
 ├── frontend/            # Vue 3 前端源码
 ├── docs/
 │   ├── sql/
 │   │   ├── schema.sql   # 8 张核心表建表脚本
 │   │   ├── seed.sql     # 演示账号与示例活动
 │   │   └── add_ban_fields.sql  # 封禁字段增量脚本
-│   ├── thesis-figures/  # 论文插图源码与产物（流程图引擎 + 各图定义脚本）
+│   ├── diagrams/        # 系统插图源码与产物（功能树 / E-R 图 / 流程图引擎）
 │   ├── system-architecture.html  # 系统架构图（可交互）
 │   └── 抢票风控功能详细方案.md
 ├── risk-analysis/       # 抢票风控离线检测（导出 → 特征 → 孤立森林）
 ├── sentiment/
 │   ├── predict_new.py   # 线上情感回填（60 秒定时任务调用）
 │   ├── model_metrics.py # 指标读取 / 实时评估
-│   └── experiments/     # 论文 6.4 节实验：数据集构建、对比实验、混淆矩阵
+│   └── experiments/     # 情感分析对比实验：数据集构建、四模型对比、混淆矩阵
 ├── tools/               # 辅助脚本（按用途分三类）
 │   ├── loadtest/        #   压测：load_test / run_load_matrix
 │   ├── verify/          #   验证：P0 回归、库存一致性、级联删除、安全用例
@@ -60,8 +60,8 @@ campus-ticket/
 └── 启动系统.bat          # 启动打包后的 jar
 ```
 
-> 论文正文、软著登记产物、答辩稿等毕设交付物不在本仓库（本地保留），
-> 仓库只收系统源码、实验脚本与可复现的数据。
+> 仓库只收系统源码、实验脚本与可复现的数据：本机配置、导出的中间数据集
+> 与报告类产物一律不入库（见 `.gitignore`）。
 
 ---
 
@@ -86,7 +86,7 @@ conda activate campus-ticket
 > 都是带 C 扩展的包，必须来自**同一频道、同一批构建**。用 pip 单独升级其中一个
 > （例如 `pip install opencv-python` 会顺手把 numpy 顶到 2.x），
 > 其余按 numpy 1.x 编译的包会立刻 `ImportError: numpy.core.multiarray failed to import`。
-> `environment.yml` 已把数值栈钉死在与论文实验一致的版本。
+> `environment.yml` 已把数值栈钉死在与离线实验一致的版本。
 
 若坚持用 pip，注意 `snownlp / pymysql / bcrypt` 走 pypi，数值栈走 conda，不要混装：
 
@@ -266,7 +266,7 @@ IsolationForest 异常检测，与 3σ 统计基线对照，输出嫌疑账号�
 
 ## 七、实验复现
 
-### 7.1 情感分析对比实验（论文 6.4 节 / 表 14 / 图 20）
+### 7.1 情感分析对比实验（SVM / LR / NB / SnowNLP）
 
 ```bash
 cd sentiment/experiments
@@ -278,14 +278,14 @@ python build_dataset.py
 #    输出 metrics.json 与 confusion_matrix.png
 python run_experiment.py
 
-# 3.（可选）将数据集导入数据库，使线上样本量与论文一致
+# 3.（可选）将数据集导入数据库，使线上样本量与实验口径一致
 python load_dataset.py
 
 # 4.（可选）用线上模型回填 sentiment 字段
 python ../predict_new.py
 ```
 
-`run_experiment.py` 使用与论文一致的设置：8:2 分层划分（`random_state=42`）、
+`run_experiment.py` 使用固定设置：8:2 分层划分（`random_state=42`）、
 字符级 1-2 元 TF-IDF（`max_features=10000`），并额外在 25 条手工真实评论上
 评测各模型的泛化命中率。
 
@@ -293,7 +293,7 @@ python ../predict_new.py
 （`python model_metrics.py`），不再手工填写；`--live` 参数则基于当前数据库
 全量样本重新训练评估。
 
-### 7.2 抢票风控离线检测（论文 6.5 节 / 图 33）
+### 7.2 抢票风控离线检测（孤立森林 vs 3σ 基线）
 
 ```bash
 cd risk-analysis
@@ -304,9 +304,9 @@ python isolation_forest.py         # 孤立森林 + 3σ 基线对照 → output/
 python plot_fig21_compare.py       # 可视化对比 → output/anomaly_plot_compare.png
 ```
 
-**复现论文 6.5 节的 341 条基准数据集**（关键，否则结果对不上）：
+**复现 341 条基准数据集**（关键，否则结果对不上）：
 
-论文 6.5 节引用的数据集来自活动 **「风控实验-混合流量」（activity_id=11）**，
+基准数据集来自活动 **「风控实验-混合流量」（activity_id=11）**，
 共 341 条：student01=141、student12=100、其余 10 个正常账号各 10 条。复现方式：
 
 ```bash
@@ -317,19 +317,19 @@ python isolation_forest.py         # 期望：孤立森林 P=R=1.00，3σ 标记
 
 > **注意**：不带参数导出的是**全库**日志（含后续新增的抢票记录），
 > 条数会随时间增长而大于 341，此时孤立森林的 P/R 不再等于 1.00——
-> 这是数据集口径变了，不是算法变了。要复核论文数值请务必带上活动参数 `11`。
+> 这是数据集口径变了，不是算法变了。要复核基准数值请务必带上活动参数 `11`。
 >
 > 管理端「运行离线检测」按钮支持按活动分析，此时导出结果会额外留档为
 > `output/grab_log_act<id>.csv`，避免覆盖全量数据集。
 
 
-### 7.3 抢票并发压测（论文 6.3 节 / 表 13）
+### 7.3 抢票并发压测
 
 ```bash
 # 单场景
 python tools/loadtest/load_test.py --threads 200 --stock 99
 
-# 完整复现论文表 13（预热 2 轮 + 每场景 3 轮取中位数）
+# 完整矩阵（预热 2 轮 + 每场景 3 轮取中位数）
 python tools/loadtest/run_load_matrix.py
 ```
 
@@ -397,18 +397,19 @@ mvnw.cmd test          # Windows
 ./mvnw test            # Linux / macOS
 ```
 
-共 **58** 个测试用例，全部为离线运行（纯 Mockito，不依赖数据库）：
+共 **65** 个测试用例，全部为离线运行（纯 Mockito，不依赖数据库）：
 
 | 测试类 | 用例数 | 覆盖点 |
 | --- | --- | --- |
 | `QrCodeUtilTest` | 10 | 动态二维码签名、格式校验、双向时间窗（含未来时间戳拒绝） |
 | `AuthInterceptorTest` | 13 | 登录态、角色校验、封禁账号持旧令牌被拒、解封后放行 |
 | `RiskRuleEngineTest` | 10 | R1 滑动窗口与惩罚名单、R2 同 IP 多账号、并发计数不丢失 |
-| `ActivityServiceImplTest` | 14 | 抢票成功/各失败分支、事务回滚、活动删除级联清理 |
+| `ActivityServiceImplTest` | 17 | 抢票成功/各失败分支、事务回滚、活动删除级联清理 |
 | `CheckinServiceImplTest` | 10 | 核销成功/重复核销/时间窗/票状态各分支 |
+| `ActivityStockSyncerTest` | 4 | 活动总库存与票种库存之和的同步（一致/不一致/版本冲突重试/空票种） |
 | `CampusTicketApplicationTests` | 1 | Spring 上下文加载 |
 
-关键回归点（对应论文 4.4.1、4.4.4 与表 12）：
+关键回归点：
 
 - **事务回滚**：活动级库存条件更新失败时必须抛 `BusinessException` 触发回滚，
   而不是 `return Result.error`——后者不回滚，会造成"票种库存已扣但无订单"的泄漏。
@@ -418,25 +419,4 @@ mvnw.cmd test          # Windows
   未来时间戳同样拒绝（防止持有密钥者伪造"永不过期"的二维码）。
 - **级联清理**：删除活动时票种/订单/电子票/核销记录/评论一并清理，
   `grab_log` 保留。
-
----
-
-## 十一、软件著作权登记材料（本地生成，产物不入库）
-
-`tools/softcopyright/` 下是登记材料的**生成脚本**；产出的 PDF/分页文件属于个人登记材料，
-已在 `.gitignore` 中排除（`docs/softcopyright/`），需要时在本地重新生成即可：
-
-| 脚本 | 作用 |
-| --- | --- |
-| `make_source_pages.py` | 挑选源文件 + 脱敏 + 分页 |
-| `render_source_pdf.py` | 渲染源程序 PDF（60 页 / 每页 50 行） |
-| `verify_source_pdf.py` | 自动验收（页数/行数/乱码/越界） |
-| `render_manual_pdf.py` | 渲染用户手册 PDF |
-
-注意事项：
-
-- **脱敏**：`make_source_pages.py` 的 `SECRET_KEYS` 列出必须隐去的口令与密钥，
-  修改配置后重新生成前先确认清单完整。
-- **字体**：渲染依赖 `C:/Windows/Fonts/simsun.ttc`，Linux 下需调整 `FONT_CANDIDATES`。
-- **验收**：提交登记前务必跑一遍 `verify_source_pdf.py`，确认「符合软著登记要求」。
 

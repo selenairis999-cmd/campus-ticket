@@ -82,7 +82,7 @@ public class CommentController {
     }
 
     /** 模型实验指标（仅管理员）
-     *  返回论文定稿口径（1828 条样本实验，见论文表 14），保证系统展示与论文一致。
+     *  返回定稿实验口径（1828 条样本对比实验），保证系统展示与实验结论一致。
      *  该接口只反映实验结论，不随运行库数据变化：模型准确率来自固定的实验数据集与
      *  5 折交叉验证选定的超参数，用另一套评估方式（默认参数、不固定划分）重算会得到
      *  不同的数字，两套并列展示只会造成"哪个才是真的"的歧义，故不再对外提供实时重算。 */
@@ -101,13 +101,13 @@ public class CommentController {
     }
 
     /**
-     * 论文定稿口径（毕业论文 6.4 节表 14：1828 条样本，SVM/LR/NB 对比实验）。
+     * 定稿实验口径（1828 条样本，SVM/LR/NB 对比实验）。
      * 启动时优先从 sentiment/experiments/metrics.json 读取实验实测结果，读取失败才退回兜底常量；
-     * 单一数据源，避免再出现"后台展示的数字与论文表 14 不一致"的问题。
+     * 单一数据源，避免再出现"后台展示的数字与实验结论不一致"的问题。
      */
     private static volatile String metricsJson = loadMetricsJsonFromFile();
 
-    /** 兜底口径：与论文 6.4 节表 14 完全一致（metrics.json 缺失时使用） */
+    /** 兜底口径：与定稿实验完全一致（metrics.json 缺失时使用） */
     private static final String FALLBACK_METRICS_JSON =
             "{\"svmAccuracy\":\"97.81%\",\"lrAccuracy\":\"97.54%\",\"nbAccuracy\":\"96.17%\","
           + "\"svmRealHitRate\":\"88%（22/25）\",\"sampleCount\":1828}";

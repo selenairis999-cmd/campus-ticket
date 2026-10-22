@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-生成论文图 7「情感分析流程图」——标准流程图符号。
+生成「情感分析流程图」——标准流程图符号。
 
 流程严格对应实现：
   CommentServiceImpl#addComment      → 发评论前置校验（已核销票数、追评次数）
@@ -8,8 +8,8 @@
   sentiment/predict_new.py           → 无效评论直接判 9，有效评论走模型
   CommentServiceImpl#stats           → 管理端聚合统计（9 不计入情感分布）
 
-用法：python docs/thesis-figures/make_fig7_flowchart.py
-输出：docs/thesis-figures/fig07_sentiment_flow_standard.png
+用法：python docs/diagrams/make_fig7_flowchart.py
+输出：docs/diagrams/fig07_sentiment_flow_standard.png
 """
 import os
 import sys

@@ -4,14 +4,14 @@
 -- 执行方式：
 --   mysql -uroot -p -e "CREATE DATABASE IF NOT EXISTS campus_ticket DEFAULT CHARACTER SET utf8mb4;"
 --   mysql -uroot -p campus_ticket < docs/sql/schema.sql
--- 说明：本项目共 8 张核心表，与论文 4.2 节表 5～表 10 一一对应。
+-- 说明：本项目共 8 张核心表，与 docs/diagrams/er/ 下的实体图一一对应。
 --       本脚本由实际运行库 SHOW CREATE TABLE 导出后整理，可重复执行（IF NOT EXISTS）。
 -- ============================================================
 
 SET NAMES utf8mb4;
 
 -- ------------------------------------------------------------
--- 表 1/8：sys_user 系统用户表（论文表 6）
+-- 表 1/8：sys_user 系统用户表
 -- role：0 管理员 / 1 学生 / 2 组织者 / 3 核销员
 -- status：1 正常 / 0 封禁（封禁到期后由业务层视为解封，不改写 status）
 -- ------------------------------------------------------------
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `sys_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='系统用户表';
 
 -- ------------------------------------------------------------
--- 表 2/8：activity 校园活动表（论文表 7）
+-- 表 2/8：activity 校园活动表
 -- version 为活动级乐观锁版本号，由条件 UPDATE 维护
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `activity` (
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `activity` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='校园活动表';
 
 -- ------------------------------------------------------------
--- 表 3/8：ticket 活动票务表 / 票种表（论文表 8）
+-- 表 3/8：ticket 活动票务表 / 票种表
 -- 注意：本表是"票种"而非电子票，电子票见 eticket
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ticket` (
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `ticket` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='活动票务表（票种）';
 
 -- ------------------------------------------------------------
--- 表 4/8：ticket_order 抢票订单表（论文表 5）
+-- 表 4/8：ticket_order 抢票订单表
 -- 一人一票判重依据：user_id + activity_id
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ticket_order` (
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `ticket_order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='抢票订单表';
 
 -- ------------------------------------------------------------
--- 表 5/8：eticket 电子票表（论文表 9）
+-- 表 5/8：eticket 电子票表
 -- qr_content 保存出票时的静态票号；动态二维码在请求接口时实时生成，不回写本表
 -- status：0 未使用 / 1 已核销 / 2 已作废
 -- ------------------------------------------------------------
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `eticket` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='电子票表';
 
 -- ------------------------------------------------------------
--- 表 6/8：checkin_record 核销记录表（论文表 5）
+-- 表 6/8：checkin_record 核销记录表
 -- 一次核销一条记录，ticket_code 冗余便于按票号追溯
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `checkin_record` (
@@ -118,10 +118,10 @@ CREATE TABLE IF NOT EXISTS `checkin_record` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='核销记录表';
 
 -- ------------------------------------------------------------
--- 表 7/8：activity_comment 活动评论表（论文表 10）
+-- 表 7/8：activity_comment 活动评论表
 -- parent_id：0 主评，>0 追评所属主评ID
 -- sentiment：模型回填的预测标签 0差评 1中评 2好评 9无意义
--- sentiment_label：造数/人工标注的真实标签，仅离线实验使用（论文 6.4 节）
+-- sentiment_label：造数/人工标注的真实标签，仅离线实验使用
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `activity_comment` (
   `id`              bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `activity_comment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='活动评论表（方案三情感分析）';
 
 -- ------------------------------------------------------------
--- 表 8/8：grab_log 抢票请求日志表（论文表 5）
+-- 表 8/8：grab_log 抢票请求日志表
 -- create_time 为 datetime(3)，毫秒精度是离线"请求间隔"特征的前提
 -- result 枚举：SUCCESS / STOCK_EMPTY / VERSION_CONFLICT / TIME_WINDOW
 --              / ACTIVITY_ENDED / DUPLICATE / RISK_BLOCKED / BANNED / ERROR

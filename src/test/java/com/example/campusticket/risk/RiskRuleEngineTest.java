@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * 在线风控规则引擎单元测试（对应论文 4.4.4 节 R1/R2 与 5.8 节内存结构清理）
+ * 在线风控规则引擎单元测试（覆盖 R1/R2 与内存结构清理）
  * 不依赖 Spring 容器与数据库，直接构造引擎对象验证规则边界。
  */
 class RiskRuleEngineTest {

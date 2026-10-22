@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-图22 重绘（仅可视化改进，数据与模型参数与 isolation_forest.py 完全一致）：
+可视化重绘（数据与模型参数与 isolation_forest.py 完全一致）：
 1. 散点图横轴改为对数刻度（interval_mean 跨 48~15040ms 两个数量级，线性轴会挤压）
 2. 标注防重叠：红点 student01/student12 上下错开；蓝点只标注 2 个代表点，其余正常账号集中为点群
 3. 柱状图保持原样（数据按 if_score 排序）
