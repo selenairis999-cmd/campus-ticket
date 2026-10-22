@@ -37,6 +37,7 @@ campus-ticket/
 ├── src/main/resources/
 │   └── application.yml  # 配置模板（密钥/口令走占位符，真实值放本地 application-local.yml）
 ├── application-local.example.yml  # 本机配置模板（复制为 application-local.yml 使用）
+├── environment.yml    # Python 侧 conda 环境定义（风控/情感分析脚本与论文实验用）
 ├── frontend/            # Vue 3 前端源码
 ├── docs/
 │   ├── sql/
@@ -72,16 +73,32 @@ campus-ticket/
 | Maven | 3.9+（或使用自带 `mvnw`） | |
 | MySQL | 8.0 | 默认端口 3306 |
 | Node.js | 18+（开发用 22） | 仅前端构建需要 |
-| Python | 3.12（Anaconda） | 需 `pymysql`、`pandas`、`scikit-learn`、`snownlp`、`matplotlib` |
+| Python | 3.12（Anaconda/Miniconda） | 依赖见根目录 `environment.yml`（numpy/scipy/pandas/scikit-learn/matplotlib + snownlp/pymysql/bcrypt） |
 
-Python 依赖安装：
+Python 依赖安装（**推荐用仓库自带的 `environment.yml`**）：
 
 ```bash
-pip install pymysql pandas scikit-learn snownlp matplotlib
+conda env create -f environment.yml
+conda activate campus-ticket
 ```
 
-> 若 Python 不在 PATH 中，请修改 `application.yml` 中
-> `risk.python-path` 与 `sentiment.python-path`（默认 `python`）。
+> 为什么不用 `pip install` 一把梭：numpy/scipy/pandas/scikit-learn/matplotlib
+> 都是带 C 扩展的包，必须来自**同一频道、同一批构建**。用 pip 单独升级其中一个
+> （例如 `pip install opencv-python` 会顺手把 numpy 顶到 2.x），
+> 其余按 numpy 1.x 编译的包会立刻 `ImportError: numpy.core.multiarray failed to import`。
+> `environment.yml` 已把数值栈钉死在与论文实验一致的版本。
+
+若坚持用 pip，注意 `snownlp / pymysql / bcrypt` 走 pypi，数值栈走 conda，不要混装：
+
+```bash
+conda install numpy=1.26.4 scipy=1.13.1 pandas=2.2.2 scikit-learn=1.4.2 matplotlib=3.8.4 pillow
+pip install snownlp pymysql bcrypt
+```
+
+> Python 解释器路径在 `application-local.yml` 中配置（本机文件，不入库）：
+> `risk.python-path` 与 `sentiment.python-path` 默认 `python`（走 PATH）；
+> 若用 conda 专用环境，请填该环境 `python.exe` 的绝对路径，例如
+> `D:/Anaconda/envs/campus-ticket/python.exe`（Windows 下用正斜杠即可）。
 
 ---
 

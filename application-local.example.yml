@@ -18,3 +18,13 @@ jwt:
 
 qrcode:
   secret: "replace-with-another-random-string"
+
+# Python 解释器：供风控离线检测与评论情感分析调用。
+# 保持默认（不写这两项）即使用 PATH 上的 python；
+# 用仓库 environment.yml 建的 conda 环境时，填该环境 python.exe 的绝对路径。
+# 建议 conda env create -f environment.yml 后用 conda env list 查路径。
+risk:
+  python-path: python
+
+sentiment:
+  python-path: python
